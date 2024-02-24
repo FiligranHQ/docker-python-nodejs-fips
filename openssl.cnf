@@ -13,8 +13,11 @@
 # defined.
 HOME			= .
 
- # Use this in order to automatically load providers.
+# Use this in order to automatically load providers.
 openssl_conf = openssl_init
+
+# For NodeJS
+nodejs_conf = nodejs_init
 
 # Comment out the next line to ignore configuration errors
 config_diagnostics = 1
@@ -50,22 +53,16 @@ tsa_policy3 = 1.2.3.4.5.7
 # Refer to the OpenSSL security policy for more information.
 .include /usr/local/ssl/fipsmodule.cnf
 
-# For NodeJS
-nodejs_conf = nodejs_init
-
-[nodejs_init]
-providers = provider_sect
-
 [openssl_init]
 providers = provider_sect
 alg_section = algorithm_sect
 
+[nodejs_init]
+providers = provider_sect
+
 [provider_sect]
 fips = fips_sect
 base = base_sect
-
-[default_sect]
-activate = 1
 
 [base_sect]
 activate = 1
