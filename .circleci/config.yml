@@ -41,7 +41,7 @@ jobs:
           command: docker buildx build --platform $BUILDX_PLATFORMS -f Dockerfile_python -t filigran/python-fips:python3.12 -t filigran/python-fips:latest --push .
           no_output_timeout: 30m
       - ms-teams/report:
-          only_on_fail: true
+          only_on_fail: false
           webhook_url: $MS_TEAMS_WEBHOOK_URL
 
 
