@@ -34,11 +34,11 @@ jobs:
           command: echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Build Docker image filigran/python-nodejs-fips
-          command: docker buildx build --platform $BUILDX_PLATFORMS -f Dockerfile_python_nodejs -t filigran/python-nodejs-fips:python3.12-nodejs20 -t filigran/python-nodejs-fips:latest --push .
+          command: docker buildx build --platform $BUILDX_PLATFORMS -f Dockerfile_python_nodejs -t filigran/python-nodejs-fips:python3.11-nodejs20 -t filigran/python-nodejs-fips:latest --push .
           no_output_timeout: 30m
       - run:
           name: Build Docker image filigran/python-fips
-          command: docker buildx build --platform $BUILDX_PLATFORMS -f Dockerfile_python -t filigran/python-fips:python3.12 -t filigran/python-fips:latest --push .
+          command: docker buildx build --platform $BUILDX_PLATFORMS -f Dockerfile_python -t filigran/python-fips:python3.11 -t filigran/python-fips:latest --push .
           no_output_timeout: 30m
       - ms-teams/report:
           only_on_fail: false
