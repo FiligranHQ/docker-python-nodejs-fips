@@ -11,7 +11,7 @@ Images are available at: https://hub.docker.com/r/filigran/python-nodejs-fips.
 Tag | OpenSSL version | Python version | Node.js version | Distro
 --- | --- | --- | --- | ---
 `latest` | 3.1.5 | 3.11.8 | 20.11.1 | alpine
-`python3.12-nodejs20` | 3.1.5 | 3.11.8 | 20.11.1 | alpine
+`python3.11-nodejs20` | 3.1.5 | 3.11.8 | 20.11.1 | alpine
 
 ## Docker Python FIPS
 
@@ -20,7 +20,7 @@ Images are available at: https://hub.docker.com/r/filigran/python-fips.
 Tag | OpenSSL version | Python version | Distro
 --- | --- | --- | ---
 `latest` | 3.1.5 | 3.11.8 | alpine
-`python3.12` | 3.1.5 | 3.11.8 | alpine
+`python3.11` | 3.1.5 | 3.11.8 | alpine
 
 ## Use the images
 
