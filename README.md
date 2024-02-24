@@ -21,3 +21,20 @@ Tag | OpenSSL version | Python version | Distro
 --- | --- | --- | ---
 `latest` | 3.1.5 | 3.12.2 | alpine
 `python3.12` | 3.1.5 | 3.12.2 | alpine
+
+## Use the images
+
+* For Python, bindings are automatically mapped to the OpenSSL FIPS 140-2 library, just run your Python scripts as usual.
+* For NodeJS, ensure to run your NodeJS programs with `--enable-fips` or `--force-fips`.
+
+## Proof of Concept / testing
+
+```bash
+$ docker run -it filigran/python-nodejs-fips:latest /bin/sh
+$ openssl version
+OpenSSL 3.1.5 30 Jan 2024 (Library: OpenSSL 3.1.5 30 Jan 2024)
+$ node --enable-fips -p 'crypto.getFips()'
+1
+$ python3 -c "import ssl; print(ssl.OPENSSL_VERSION);"
+OpenSSL 3.1.5 30 Jan 2024
+```
