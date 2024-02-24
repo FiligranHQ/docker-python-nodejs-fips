@@ -1,8 +1,8 @@
 # 🐳 Docker FIPS for NodeJS and Python
 
-[![Pulls](https://img.shields.io/docker/pulls/filigran/python-nodejs-fips.svg?style=flat-square)](https://hub.docker.com/r/filigran/python-nodejs-fips/)
-[![Pulls](https://img.shields.io/docker/pulls/filigran/python-fips.svg?style=flat-square)](https://hub.docker.com/r/filigran/python-fips/)
-[![CircleCI](https://img.shields.io/circleci/project/github/FiligranHQ/docker-python-nodejs-fips.svg?style=flat-square)](https://circleci.com/gh/FiligranHQ/docker-python-nodejs-fips)
+[![Pulls](https://img.shields.io/docker/pulls/filigran/python-nodejs-fips.svg)](https://hub.docker.com/r/filigran/python-nodejs-fips/)
+[![Pulls](https://img.shields.io/docker/pulls/filigran/python-fips.svg)](https://hub.docker.com/r/filigran/python-fips/)
+[![CircleCI](https://img.shields.io/circleci/project/github/FiligranHQ/docker-python-nodejs-fips.svg)](https://circleci.com/gh/FiligranHQ/docker-python-nodejs-fips)
 
 ## Docker Python NodeJS FIPS
 
