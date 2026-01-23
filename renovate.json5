@@ -69,6 +69,12 @@
       ],
       "automerge": false,
       "automergeStrategy": "squash"
+    },
+    {
+      "matchPackageNames": [
+        "python/cpython"
+      ],
+      "matchCurrentVersion": "<=3.12"
     }
   ]
 }
