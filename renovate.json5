@@ -63,17 +63,6 @@
       "matchPackageNames": [
         "python/cpython"
       ],
-      "allowedVersions": "<=3.12",
-      "matchUpdateTypes": [
-        "patch"
-      ],
-      "automerge": false,
-      "automergeStrategy": "squash"
-    },
-    {
-      "matchPackageNames": [
-        "python/cpython"
-      ],
       "allowedVersions": "<=3.12"
     }
   ]
