@@ -36,6 +36,7 @@
       "matchStrings": [
         "ARG PYTHON_VERSION=(?<currentValue>.*?)\\s"
       ],
+      "matchCurrentVersion": "<=3.12",
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "python/cpython",
       "extractVersionTemplate": "^v(?<version>.*)$",
