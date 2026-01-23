@@ -63,7 +63,6 @@
       "matchPackageNames": [
         "python/cpython"
       ],
-      "matchCurrentVersion": "<=3.12",
       "matchUpdateTypes": [
         "patch"
       ],
@@ -74,7 +73,7 @@
       "matchPackageNames": [
         "python/cpython"
       ],
-      "matchCurrentVersion": "<=3.12"
+      "allowedVersions": "<=3.12"
     }
   ]
 }
