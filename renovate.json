@@ -44,20 +44,16 @@
   ],
   "packageRules": [
     {
-      "matchDatasources": ["github-tags"],
       "matchPackageNames": ["openssl/openssl"],
       "matchUpdateTypes": ["patch"],
-      "automerge": true,
-      "automergeType": "pr",
-      "automergeStrategy": "squash",
+      "automerge": false,
+      "automergeStrategy": "squash"
     },
     {
-      "matchDatasources": ["github-tags"],
       "matchPackageNames": ["python/cpython"],
       "matchUpdateTypes": ["patch"],
-      "automerge": true,
-      "automergeType": "pr",
-      "automergeStrategy": "squash",
+      "automerge": false,
+      "automergeStrategy": "squash"
     }
   ]
 }
