@@ -1,9 +1,25 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "docker:enableMajor"
   ],
-
+  "labels": [
+    "dependencies",
+    "filigran team"
+  ],
+  "commitMessagePrefix": "[deps]",
+  "minimumReleaseAge": "3 days",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 100,
+  "branchConcurrentLimit": 100,
+  "timezone": "Europe/Paris",
+  "schedule": [
+    "* 0-4,22-23 * * 1-5",
+    "* * * * 0,6"
+  ],
+  "updateNotScheduled": false,
+  "rebaseWhen": "conflicted",
   "regexManagers": [
     {
       "fileMatch": ["Dockerfile*"],
@@ -34,7 +50,6 @@
       "automerge": true,
       "automergeType": "pr",
       "automergeStrategy": "squash",
-      "minimumReleaseAge": "3 days"
     },
     {
       "matchDatasources": ["github-tags"],
@@ -43,7 +58,6 @@
       "automerge": true,
       "automergeType": "pr",
       "automergeStrategy": "squash",
-      "minimumReleaseAge": "3 days"
     }
   ]
 }
