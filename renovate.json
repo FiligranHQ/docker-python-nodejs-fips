@@ -20,9 +20,12 @@
   ],
   "updateNotScheduled": false,
   "rebaseWhen": "conflicted",
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["Dockerfile*"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/Dockerfile*/"
+      ],
       "matchStrings": [
         "ARG OPENSSL_VERSION=(?<currentValue>.*?)\\s"
       ],
@@ -32,7 +35,10 @@
       "versioningTemplate": "semver"
     },
     {
-      "fileMatch": ["Dockerfile*"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/Dockerfile*/"
+      ],
       "matchStrings": [
         "ARG PYTHON_VERSION=(?<currentValue>.*?)\\s"
       ],
@@ -44,15 +50,23 @@
   ],
   "packageRules": [
     {
-      "matchPackageNames": ["openssl/openssl"],
-      "matchUpdateTypes": ["patch"],
+      "matchPackageNames": [
+        "openssl/openssl"
+      ],
+      "matchUpdateTypes": [
+        "patch"
+      ],
       "automerge": false,
       "automergeStrategy": "squash"
     },
     {
-      "matchPackageNames": ["python/cpython"],
+      "matchPackageNames": [
+        "python/cpython"
+      ],
       "matchCurrentVersion": "<=3.12",
-      "matchUpdateTypes": ["patch"],
+      "matchUpdateTypes": [
+        "patch"
+      ],
       "automerge": false,
       "automergeStrategy": "squash"
     }
