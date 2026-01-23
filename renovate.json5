@@ -20,6 +20,7 @@
   ],
   "updateNotScheduled": false,
   "rebaseWhen": "conflicted",
+  "automergeStrategy": "squash",
   "customManagers": [
     {
       "customType": "regex",
@@ -56,14 +57,14 @@
       "matchUpdateTypes": [
         "patch"
       ],
-      "automerge": false,
-      "automergeStrategy": "squash"
+      "automerge": true
     },
     {
       "matchPackageNames": [
         "python/cpython"
       ],
-      "allowedVersions": "<=3.12"
+      "allowedVersions": "<=3.12",
+      "automerge": true
     }
   ]
 }
