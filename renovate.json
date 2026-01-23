@@ -1,6 +1,60 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "docker:enableMajor"
+  ],
+  "labels": [
+    "dependencies",
+    "filigran team"
+  ],
+  "commitMessagePrefix": "[deps]",
+  "minimumReleaseAge": "3 days",
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 100,
+  "branchConcurrentLimit": 100,
+  "timezone": "Europe/Paris",
+  "schedule": [
+    "* 0-4,22-23 * * 1-5",
+    "* * * * 0,6"
+  ],
+  "updateNotScheduled": false,
+  "rebaseWhen": "conflicted",
+  "regexManagers": [
+    {
+      "fileMatch": ["Dockerfile*"],
+      "matchStrings": [
+        "ARG OPENSSL_VERSION=(?<currentValue>.*?)\\s"
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "openssl/openssl",
+      "extractVersionTemplate": "^openssl-(?<version>.*)$",
+      "versioningTemplate": "semver"
+    },
+    {
+      "fileMatch": ["Dockerfile*"],
+      "matchStrings": [
+        "ARG PYTHON_VERSION=(?<currentValue>.*?)\\s"
+      ],
+      "matchCurrentVersion": "<=3.12",
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "python/cpython",
+      "extractVersionTemplate": "^v(?<version>.*)$",
+      "versioningTemplate": "semver"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["openssl/openssl"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": false,
+      "automergeStrategy": "squash"
+    },
+    {
+      "matchPackageNames": ["python/cpython"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": false,
+      "automergeStrategy": "squash"
+    }
   ]
 }
