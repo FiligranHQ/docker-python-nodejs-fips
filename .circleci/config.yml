@@ -54,7 +54,14 @@ jobs:
           webhook_url: $MS_TEAMS_WEBHOOK_URL
 
 workflows:
-  docker:
+  docker_on_push:
+    jobs:
+      - build_docker:
+          filters:
+            branches:
+              only:
+                - main
+  docker_scheduled:
     triggers:
       - schedule:
           cron: "0 0 * * *"
