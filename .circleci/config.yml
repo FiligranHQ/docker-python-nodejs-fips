@@ -41,7 +41,7 @@ jobs:
           no_output_timeout: 30m
       - ms-teams/report:
           only_on_fail: false
-          webhook_url: $MS_TEAMS_WEBHOOK_URL
+          webhook_url: $MS_TEAMS_WORKFLOW_WEBHOOK_URL
 
 
   notify:
@@ -51,7 +51,7 @@ jobs:
       - run: sudo apt-get update -qq && sudo apt install curl
       - ms-teams/report:
           only_on_fail: false
-          webhook_url: $MS_TEAMS_WEBHOOK_URL
+          webhook_url: $MS_TEAMS_WORKFLOW_WEBHOOK_URL
 
 workflows:
   docker_on_push:
