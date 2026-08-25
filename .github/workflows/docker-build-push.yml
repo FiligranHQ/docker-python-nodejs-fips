@@ -1,0 +1,60 @@
+name: Build and publish Docker images
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Daily rebuild, to pick up upstream Alpine security updates.
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-build-push-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: filigran/python-fips
+            dockerfile: Dockerfile_python
+            tags: |
+              filigran/python-fips:python3.12
+              filigran/python-fips:latest
+          - image: filigran/python-nodejs-fips
+            dockerfile: Dockerfile_python_nodejs
+            tags: |
+              filigran/python-nodejs-fips:python3.12-nodejs22
+              filigran/python-nodejs-fips:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.image }}
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          platforms: linux/amd64
+          pull: true
+          push: true
+          no-cache: true
+          tags: ${{ matrix.tags }}
