@@ -1,70 +1,40 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    ":semanticCommits",
-    "config:recommended",
-    "docker:enableMajor"
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    'docker:enableMajor',
+    ':semanticCommits',
   ],
-  "labels": [
-    "dependencies",
-    "filigran team"
+  labels: [
+    'dependencies',
+    'filigran team',
   ],
-  "minimumReleaseAge": "3 days",
-  "prHourlyLimit": 2,
-  "prConcurrentLimit": 100,
-  "branchConcurrentLimit": 100,
-  "timezone": "Europe/Paris",
-  "schedule": [
-    "* 0-4,22-23 * * 1-5",
-    "* * * * 0,6"
+  minimumReleaseAge: '3 days',
+  // high limits so that all PRs are created at once during the schedule window rather than being drip-fed across multiple runs
+  prHourlyLimit: 100,
+  prConcurrentLimit: 100,
+  branchConcurrentLimit: 100,
+  timezone: 'Europe/Paris',
+  // weekdays outside working hours (22h-5h) + all weekend
+  schedule: [
+    '* 0-4,22-23 * * 1-5',
+    '* * * * 0,6',
   ],
-  "updateNotScheduled": false,
-  "rebaseWhen": "conflicted",
-  "automergeStrategy": "squash",
-  "customManagers": [
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/Dockerfile*/"
-      ],
-      "matchStrings": [
-        "ARG OPENSSL_VERSION=(?<currentValue>.*?)\\s"
-      ],
-      "datasourceTemplate": "github-tags",
-      "depNameTemplate": "openssl/openssl",
-      "extractVersionTemplate": "^openssl-(?<version>.*)$",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": [
-        "/Dockerfile*/"
-      ],
-      "matchStrings": [
-        "ARG PYTHON_VERSION=(?<currentValue>.*?)\\s"
-      ],
-      "datasourceTemplate": "github-tags",
-      "depNameTemplate": "python/cpython",
-      "extractVersionTemplate": "^v(?<version>.*)$",
-      "versioningTemplate": "semver"
-    }
-  ],
-  "packageRules": [
-    {
-      "matchPackageNames": [
-        "openssl/openssl"
-      ],
-      "matchUpdateTypes": [
-        "patch"
-      ],
-      "automerge": true
-    },
-    {
-      "matchPackageNames": [
-        "python/cpython"
-      ],
-      "allowedVersions": "<=3.12",
-      "automerge": true
-    }
-  ]
+  // prevent Renovate from updating existing PRs outside the schedule window
+  updateNotScheduled: false,
+  // only rebase when there is a conflict; avoids unnecessary CI runs on every base branch change, can be removed when number of open PR is low
+  rebaseWhen: 'conflicted',
+  vulnerabilityAlerts: {
+    // as we don't rely on Renovate to be informed of dependency security advisories,
+    // vulnerabilityAlerts is disabled since it can cause problems by skipping minimumReleaseAge, schedule and other constraints
+    enabled: false,
+  },
+  // do lock file maintenance once a week on Sunday
+  lockFileMaintenance: {
+    schedule: [
+      '* * * * 0',
+    ],
+    rebaseWhen: 'auto',
+    enabled: true,
+  },
 }
