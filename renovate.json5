@@ -29,6 +29,36 @@
     // vulnerabilityAlerts is disabled since it can cause problems by skipping minimumReleaseAge, schedule and other constraints
     enabled: false,
   },
+  // The legacy images compile OpenSSL and CPython from pinned sources, so these
+  // pins are the only way they receive security fixes. Scoped to legacy/ on
+  // purpose: the root Dockerfile's PYTHON_VERSION is a tag assertion, not a
+  // source version, and must not be bumped by a bot.
+  customManagers: [
+    {
+      customType: 'regex',
+      managerFilePatterns: ['/^legacy/Dockerfile/'],
+      matchStrings: ['ARG OPENSSL_VERSION=(?<currentValue>.*?)\\s'],
+      datasourceTemplate: 'github-tags',
+      depNameTemplate: 'openssl/openssl',
+      extractVersionTemplate: '^openssl-(?<version>.*)$',
+      versioningTemplate: 'semver',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: ['/^legacy/Dockerfile/'],
+      matchStrings: ['ARG PYTHON_VERSION=(?<currentValue>.*?)\\s'],
+      datasourceTemplate: 'github-tags',
+      depNameTemplate: 'python/cpython',
+      extractVersionTemplate: '^v(?<version>.*)$',
+      versioningTemplate: 'semver',
+    },
+  ],
+  packageRules: [
+    {
+      matchPackageNames: ['python/cpython'],
+      allowedVersions: '<=3.12',
+    },
+  ],
   // do lock file maintenance once a week on Sunday
   lockFileMaintenance: {
     schedule: [
