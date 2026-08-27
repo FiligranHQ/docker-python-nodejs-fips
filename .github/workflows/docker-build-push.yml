@@ -51,7 +51,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build filigran/python-fips
+      - name: Build filigran/alpine-python-fips
         uses: docker/build-push-action@v7
         with:
           context: .
@@ -60,10 +60,10 @@ jobs:
           pull: true
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
-            filigran/python-fips:python${{ steps.versions.outputs.python }}
-            filigran/python-fips:latest
+            filigran/alpine-python-fips:python${{ steps.versions.outputs.python }}
+            filigran/alpine-python-fips:latest
 
-      - name: Build filigran/python-nodejs-fips
+      - name: Build filigran/alpine-python-nodejs-fips
         uses: docker/build-push-action@v7
         with:
           context: .
@@ -71,5 +71,5 @@ jobs:
           platforms: linux/amd64
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
-            filigran/python-nodejs-fips:python${{ steps.versions.outputs.python }}-nodejs${{ steps.versions.outputs.nodejs }}
-            filigran/python-nodejs-fips:latest
+            filigran/alpine-python-nodejs-fips:python${{ steps.versions.outputs.python }}-nodejs${{ steps.versions.outputs.nodejs }}
+            filigran/alpine-python-nodejs-fips:latest

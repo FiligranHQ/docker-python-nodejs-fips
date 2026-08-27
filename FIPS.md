@@ -69,7 +69,7 @@ the system one.
 ## Verifying an image yourself
 
 ```bash
-docker run --rm filigran/python-nodejs-fips:latest sh -c '
+docker run --rm filigran/alpine-python-nodejs-fips:latest sh -c '
   openssl list -providers
   node --enable-fips -p "crypto.getFips()"
   python3 -c "import ssl; print(ssl.OPENSSL_VERSION)"
