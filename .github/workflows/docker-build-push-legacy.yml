@@ -42,7 +42,7 @@ jobs:
           - image: filigran/python-nodejs-fips
             dockerfile: Dockerfile_python_nodejs
             tags: |
-              filigran/python-nodejs-fips:python3.12-nodejs22
+              filigran/python-nodejs-fips:python3.12-nodejs24
               filigran/python-nodejs-fips:latest
     steps:
       - name: Checkout repository
