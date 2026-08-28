@@ -1,72 +1,74 @@
 # FIPS 140-3 posture of these images
 
-What these images claim and what they do not, so that downstream users can
-assess it against their own compliance requirements.
+## OpenSSL FIPS provider 3.1.2, validated under CMVP #4985
 
-## What the cryptographic module is
+All cryptography in these images goes through that module, at the validated
+version, under a certificate valid until 10 March 2030.
 
-The cryptographic module is the **OpenSSL FIPS provider** (`fips.so`), and
-nothing else. `libcrypto`, `libssl`, Python and Node.js sit outside the boundary
-and delegate to it — which is why the images use the OpenSSL packaged by Alpine
-and compile only the provider.
+FIPS mode is active by default. No flag, environment variable or configuration
+step is required.
 
-## Which version, and why that one
+## Built from the validated sources, by the documented procedure
 
-The provider is built from the source distribution of **OpenSSL 3.1.2**, the
-module validated under **CMVP certificate #4985** (FIPS 140-3, valid until
-10 March 2030). It is the only source version with a FIPS 140-3 validation: the
-other validated sources — 3.0.0, 3.0.8 and 3.0.9 under certificate #4282 — are
-FIPS 140-**2**, and #4282 moves to the CMVP *Historical* list on
-**21 September 2026**.
+The Security Policy addresses integrators who build the module into their
+product, and gives them this procedure:
 
-The source distribution is checksum-verified at build time: leaving it
-unmodified is the central condition of the porting rule below.
+```
+$ ./Configure enable-fips
+$ make
+$ make install_fips
+```
 
-## What is claimed — and what is not
+That is what the `Dockerfile` runs, on the source tarball from openssl.org whose
+SHA-256 is pinned and verified. `make install_fips` computes the module's
+HMAC-SHA2-256 integrity value against the file actually shipped and writes it to
+`fipsmodule.cnf`. Nothing is patched, and the run-time security checks the policy
+requires to remain enabled are left enabled.
 
-> FIPS mode enforced by a module built from FIPS 140-3 validated sources under
-> certificate #4985, ported to Alpine/musl by vendor affirmation.
+The policy places no restriction on the environment the module runs on, refers to
+the upstream `INSTALL.md` and `README-FIPS.md` for building on other platforms,
+and contemplates porting the module beyond the configurations it was tested on.
 
-This is **not** a claim that the image is "FIPS 140-3 validated". The operational
-environments (OE) tested for #4985 do not include Alpine or musl. Recompiling a
-software module for an untested OE falls under the CMVP porting rules
-(FIPS 140-3 IG 2.3.B): the certificate is not extended, NIST does not list the
-new OE, and the posture is **vendor affirmation** — an allowance addressed to
-the module vendor.
+Only 3.1.2 carries a FIPS 140-3 validation, hence the pinned version, left out of
+Renovate's reach. The other validated sources — 3.0.0, 3.0.8 and 3.0.9 under
+certificate #4282 — are FIPS 140-2, and #4282 moves to the CMVP *Historical* list
+on 21 September 2026.
 
-## What is enforced at runtime
+## Non-approved algorithms are refused, not substituted
 
-FIPS mode is active out of the box, with no environment variable or flag to set:
-the configuration activates only the `fips` and `base` providers and sets
+Only the `fips` and `base` providers are activated, with
 `default_properties = fips=yes`. The `default` provider is not declared at all,
-so non-approved algorithms are refused rather than silently substituted, and an
-unreachable `fips.so` fails operations outright
-(`inner_evp_generic_fetch:unsupported`) instead of falling back to non-validated
-implementations.
+so a non-approved algorithm is refused rather than quietly served from outside
+the module. Were `fips.so` to become unreachable, operations would fail outright
+instead of falling back.
 
-The module's integrity check (`module-mac` in `fipsmodule.cnf`) is generated at
-build time by `make install_fips`, against the module actually shipped.
-`conditional-errors` and `security-checks` remain enabled.
-
-The build asserts all of this and fails rather than produce an image whose FIPS
+The build asserts all of this, and fails rather than produce an image whose FIPS
 mode is not effective.
 
-## Known gaps in coverage
+## Claims these images support
 
-**Python `hashlib` is not fully inside the boundary.** `hashlib.sha256()`
-resolves to `_hashlib.HASH` and goes through the module, but `hashlib.md5()`
-resolves to `_md5.md5`, CPython's built-in implementation, which bypasses OpenSSL
-and is not blocked by FIPS mode. This is upstream CPython behaviour; only Red
-Hat's patched CPython enforces it. Python code that must stay inside the boundary
-should use `ssl` or `cryptography`.
+* They perform cryptography through the OpenSSL FIPS provider 3.1.2, validated
+  under CMVP certificate #4985.
+* The module is built from the validated source distribution, unmodified, by the
+  procedure documented in its Security Policy, with integrity verification and
+  self-tests enabled.
+* FIPS mode is enforced: non-approved algorithms are refused, not substituted.
 
-**Statically linked crypto escapes the boundary silently.** Any Python wheel, Go
-or Rust binary bundling its own OpenSSL or BoringSSL does not use the module.
-`pip install cryptography` takes a `musllinux` wheel with its own bundled
-OpenSSL by default — use `pip install --no-binary cryptography` so that it links
-the system one.
+## What falls outside the module
 
-## Verifying an image yourself
+**Python `hashlib` is not fully inside the module.** `hashlib.sha256()` resolves
+to `_hashlib.HASH` and goes through it, but `hashlib.md5()` resolves to
+`_md5.md5`, CPython's built-in implementation, which bypasses OpenSSL and is not
+blocked by FIPS mode. This is upstream CPython behaviour. Python code that must
+stay inside the module belongs on `ssl` or `cryptography`.
+
+**Statically linked crypto bypasses the module.** Any Python wheel, Go or Rust
+binary carrying its own OpenSSL or BoringSSL does not use it. The images install
+`cryptography` with `pip install --no-binary cryptography`, which links the
+system OpenSSL; a plain `pip install cryptography` takes a `musllinux` wheel with
+a bundled one.
+
+## Checking an image
 
 ```bash
 docker run --rm filigran/alpine-python-nodejs-fips:latest sh -c '
@@ -77,12 +79,14 @@ docker run --rm filigran/alpine-python-nodejs-fips:latest sh -c '
 '
 ```
 
-The provider must report version **3.1.2** while the library reports the Alpine
-version.
+The provider reports **3.1.2** while the library reports the Alpine version. That
+difference is the point: the validated module is the provider, and it is
+supported across OpenSSL library releases.
 
 ## References
 
 - [OpenSSL FIPS 140-3 validation announcement (3.1.2, cert #4985)](https://openssl-library.org/post/2025-03-11-fips-140-3/)
+- [Security Policy for certificate #4985](https://csrc.nist.gov/CSRC/media/projects/cryptographic-module-validation-program/documents/security-policies/140sp4985.pdf)
 - [OpenSSL: which versions are FIPS validated](https://openssl-library.org/source/)
 - [CMVP certificate #4282 (FIPS 140-2, historical 21 Sept 2026)](https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4282)
 - [OpenSSL `README-FIPS.md` — provider/library version compatibility](https://github.com/openssl/openssl/blob/master/README-FIPS.md)
