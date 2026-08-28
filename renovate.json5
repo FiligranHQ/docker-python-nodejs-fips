@@ -54,6 +54,28 @@
     },
   ],
   packageRules: [
+    // group non-major devDependencies and GitHub Actions once a week to avoid Renovate noise
+    {
+      groupName: 'devDependencies (non-major)',
+      groupSlug: 'dev-dependencies-non-major',
+      description: 'Batch non-major updates of dev dependencies and GitHub Actions once a week on Sunday',
+      schedule: [
+        '* * * * 0',
+      ],
+      matchDepTypes: [
+        'devDependencies',
+        'action',
+      ],
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+        'pin',
+        'digest',
+      ],
+      // use 'auto' here so grouped PRs stay up-to-date automatically,
+      // since we batch them and want them merge-ready on Monday
+      rebaseWhen: 'auto',
+    },
     {
       matchPackageNames: ['python/cpython'],
       allowedVersions: '<=3.12',
