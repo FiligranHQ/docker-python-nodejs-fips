@@ -19,22 +19,6 @@ Images are available at: https://hub.docker.com/r/filigran/alpine-python-nodejs-
 
 Images are available at: https://hub.docker.com/r/filigran/alpine-python-fips.
 
-## Migrating from `filigran/python-fips` and `filigran/python-nodejs-fips`
-
-Those two images are still built daily, from `legacy/`, so that consumers
-tracking them keep receiving updates while they migrate. They are a migration
-window, not a maintained line: their FIPS provider is built from the same sources
-as the OpenSSL libraries and therefore carries **no CMVP certificate** — which is
-what the images above fix. The legacy workflow is meant to be deleted.
-
-What changes when moving to the images above:
-
-* `npm` and `yarn` are gone, and so is the build toolchain (`rust`, `cargo`,
-  `gcc`) — an image that compiles native wheels has to install its own.
-* The FIPS provider comes from the OpenSSL 3.1.2 validated sources instead of the
-  same version as the libraries, so the set of accepted algorithms differs.
-* Node.js is 24, which the tag now states.
-
 ## Use the images
 
 * For Python, bindings are automatically mapped to the OpenSSL FIPS provider,
@@ -69,3 +53,12 @@ Error setting digest
 The FIPS provider reports `3.1.2` while the library reports the Alpine version.
 That difference is expected: the validated module is the provider, and it is
 supported across OpenSSL library releases.
+
+## Previous images
+
+`filigran/python-fips` and `filigran/python-nodejs-fips` are no longer published.
+They remain pullable at their last build but receive no further updates, so pin
+`filigran/alpine-python-fips` or `filigran/alpine-python-nodejs-fips` instead.
+They differ: `npm`, `yarn` and the build toolchain are not installed, and the
+FIPS provider is built from the OpenSSL 3.1.2 validated sources rather than from
+the same sources as the libraries, so the set of accepted algorithms differs.
