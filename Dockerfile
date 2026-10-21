@@ -11,6 +11,7 @@ ENV LANG=C.UTF-8
 RUN << EOT
     set -euxo pipefail
 
+    apk upgrade --no-cache
     apk add --no-cache ca-certificates openssl python3 py3-pip libffi
     rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED
 EOT
