@@ -8,10 +8,6 @@ ARG OPENSSL_FIPS_SHA256=a0ce69b8b97ea6a35b96875235aa453b966ba3cba8af2de23657d8b6
 
 ENV LANG=C.UTF-8
 
-# The alpine tag is only rebuilt on Alpine point releases, so its packages lag
-# behind security fixes in between. Upgrading here, before anything else, makes
-# the FIPS provider build and the assertions below run against the upgraded
-# OpenSSL libraries.
 RUN << EOT
     set -euxo pipefail
 
