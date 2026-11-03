@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - legacy/**
   pull_request:
+    paths-ignore:
+      - legacy/**
   schedule:
     # Daily rebuild, to pick up upstream Alpine security updates.
     - cron: "0 0 * * *"
