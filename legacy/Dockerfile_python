@@ -8,6 +8,7 @@ ENV LANG C.UTF-8
 
 # Install OpenSSL FIPS
 RUN set -ex \
+    && apk upgrade --no-cache \
     && apk add --no-cache --virtual .build-deps make gcc libgcc musl-dev linux-headers perl vim \
     && wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz \
     && tar -xf openssl-${OPENSSL_VERSION}.tar.gz \
