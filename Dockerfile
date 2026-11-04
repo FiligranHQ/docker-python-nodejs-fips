@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM alpine:3.23 AS python-fips
+FROM alpine:3.24 AS python-fips
 
 # Only source version validated under FIPS 140-3 (CMVP #4985). Must not be
 # bumped automatically: any other version leaves the validated lineage.
