@@ -46,6 +46,7 @@ RUN set -ex \
     && make install \
     && cd .. \
     && apk del .build-deps \
+    && apk add --no-cache '!ssl_client' \
     && ln -sf /usr/local/bin/idle3 /usr/local/bin/idle \
     && ln -sf /usr/local/bin/pydoc3 /usr/local/bin/pydoc \
     && ln -sf /usr/local/bin/python3 /usr/local/bin/python \

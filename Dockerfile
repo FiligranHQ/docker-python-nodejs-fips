@@ -46,6 +46,12 @@ RUN << EOT
     # pip's isolated build environment and cargo keep their own caches, which
     # apk del does not cover.
     rm -rf /root/.cache /root/.cargo
+
+    # ssl_client only serves BusyBox wget over HTTPS, needed above for the
+    # OpenSSL source. It is installed automatically next to busybox and libssl3,
+    # so 'apk del' keeps it: the world constraint removes it and keeps it out
+    # of the images built from this one.
+    apk add --no-cache '!ssl_client'
 EOT
 
 COPY openssl.cnf /etc/ssl/openssl.cnf
